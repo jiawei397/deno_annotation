@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head> 
+    <meta charset="utf-8"> 
+    <title>trans markdown to annotation</title> 
+    <style>
+        #container {
+            width: 900px;
+            height: 500px;
+            display: flex;
+            flex-direction: row;
+        }
+
+        textarea {
+            width: 45%;
+            height: 100%;
+            margin-left: 20px;
+        }
+
+        #btns {
+            padding: 20px;
+            /* display: flex; */
+            /* flex-direction: row; */
+        }
+
+        button {
+            padding: 10px;
+        }
+    </style>
+    <script>
+        function submit(isModule) {
+            const text = document.getElementById('markdown').value;
+            const arr = text.split("\n");
+            // console.log(arr.length, arr);
+            let str = "/**\n";
+
+            arr.forEach((line) => {
+                str += " * " + line + "\n";
+            });
+            if (isModule) {
+                str += " * @module\n"
+            }
+            str += " */";
+
+            // console.log(str);
+            document.getElementById('content').value = str;
+        }
+
+        function handleCopy() {
+            const range = document.createRange();
+            range.selectNode(document.getElementById('content'));
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) selection.removeAllRanges();
+            selection.addRange(range);
+            document.execCommand('copy');
+            alert('Copied!');
+            selection.removeRange(range);
+        }
+    </script>
+</head>
+
+<body>
+    <h1>trans markdown to annotation</h1>
+    <div id="container">
+        <textarea rows="10" cols="30" id="markdown" placeholder="please input markdown"></textarea>
+        <textarea readonly id="content"></textarea>
+    </div>
+    <div id="btns">
+        <button onclick="submit(true)">module</button>
+        <button onclick="submit()">normal</button>
+        <button onclick="handleCopy()">copy</button>
+    </div>
+</body>
+
+</html>
